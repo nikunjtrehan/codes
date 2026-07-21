@@ -1,55 +1,29 @@
-using namespace std;
-
 class Solution {
 public:
     int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-        if (intervals.empty()) return 0;
-
-        int max_start = INT_MIN;
-        int min_start = INT_MAX;
-        
-        // 1. Find both the upper and lower bounds to calculate the true span
-        for (const auto& interval : intervals) {
-            max_start = max(max_start, interval[0]);
-            min_start = min(min_start, interval[0]);
+        if (intervals.empty()) {
+            return 0;
         }
-        
-        // 2. Create an offset to shift negative start times to index 0
-        int offset = -min_start;
-        int range = max_start - min_start + 1;
-        
-        vector<int> max_ends(range, INT_MAX);
-        
-        for (const auto& interval : intervals) {
-            // Apply offset to all coordinates
-            int start = interval[0] + offset;
-            int end = interval[1] + offset;
-            max_ends[start] = min(max_ends[start], end);
-        }
-        
-        int current_start = INT_MAX;
-        int current_end = INT_MAX;
-        int sum = 0;
 
-        for (int i = 0; i < range; ++i) {
-            if (max_ends[i] != INT_MAX) {
+        // Sort intervals based on their end times
+        sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];
+        });
+
+        int sum = 0; // Tracks the number of overlaps to erase
+        int last_kept_end = intervals[0][1];
+
+        for (int i = 1; i < intervals.size(); ++i) {
+            // Check if the current interval overlaps with the last kept interval
+            if (intervals[i][0] < last_kept_end) {
+                // Overlap found: we conceptually "erase" this interval
                 sum++;
-                
-                if (current_start == INT_MAX) {
-                    current_start = i;
-                    current_end = max_ends[i];
-                } 
-                else if (i < current_end) {
-                    current_end = min(current_end, max_ends[i]);
-                    max_ends[i] = INT_MAX;
-                    sum--;
-                } 
-                else {
-                    current_start = i;
-                    current_end = max_ends[i];
-                }
+            } else {
+                // No overlap: we keep this interval and update our reference point
+                last_kept_end = intervals[i][1];
             }
-        } 
-        return intervals.size() - sum;
+        }
+
+        return sum;
     }
 };
