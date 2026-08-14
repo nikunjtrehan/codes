@@ -13,10 +13,7 @@ public:
                 rs=mid-1;
             }
             if(target>nums[mid]){
-                // if(ls==mid){
-                //     ls++;
-                //     continue;
-                // }
+              
                ls=mid+1;
            }
            if(target==nums[mid]){
