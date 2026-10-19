@@ -5,7 +5,8 @@ public:
         for(int num : nums) {
            
             if(seen.count(num)) {
-                return true; 
+                return true;
+                break; 
             }
             seen.insert(num);
         }
