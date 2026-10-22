@@ -23,7 +23,7 @@ public:
         
         vector<vector<string>> ans;
         for (auto& pair : groups) {
-            ans.push_back(pair.second);
+            ans.push_back(move(pair.second));
         }
         
         return ans;
