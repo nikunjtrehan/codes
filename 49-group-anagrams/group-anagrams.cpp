@@ -8,7 +8,7 @@ public:
             mp[key].push_back(s);
         }
         vector<vector<string>> ans;
-        for (auto& p : mp) ans.push_back(std::move(p.second));
+        for (auto& p : mp) ans.push_back(p.second);
         return ans;
     }
 };
